@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kushvanth Chapala | Cybersecurity Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #00ff41;
+    --green-dim: #00cc33;
+    --green-glow: rgba(0,255,65,0.13);
+    --bg: #020c02;
+    --bg2: #060f06;
+    --bg3: #0b1a0b;
+    --border: rgba(0,255,65,0.18);
+    --text: #c8ffc8;
+    --text-dim: #4e7a4e;
+    --red: #ff3b3b;
+    --orange: #ff8c00;
+    --yellow: #ffd700;
+    --cyan: #00e5ff;
+    --blue: #4fc3f7;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* scanlines */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events:none; z-index:9999;
+  }
+
+  /* dot grid */
+  body::after {
+    content:'';
+    position:fixed; inset:0;
+    background-image: radial-gradient(rgba(0,255,65,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    background: rgba(2,12,2,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2.5rem;
+    display:flex; align-items:center; justify-content:space-between;
+    height:54px;
+  }
+  .nav-logo {
+    font-family:'Orbitron',monospace; font-weight:900; font-size:1rem;
+    color:var(--green); text-shadow:0 0 18px var(--green); letter-spacing:4px;
+  }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a {
+    color:var(--text-dim); text-decoration:none; font-size:10px;
+    letter-spacing:2.5px; text-transform:uppercase; transition:color 0.2s;
+  }
+  .nav-links a:hover { color:var(--green); text-shadow:0 0 8px var(--green); }
+  .nav-right { display:flex; align-items:center; gap:1.5rem; }
+  .nav-time { font-size:10px; color:var(--text-dim); letter-spacing:1px; }
+  .pulse { display:inline-block; width:7px; height:7px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; box-shadow:0 0 6px var(--green); }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+
+  /* ── LOADER ── */
+  #loader {
+    position:fixed; inset:0; background:#000; z-index:99999;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:1.2rem;
+    font-family:'Share Tech Mono',monospace;
+    animation: loaderOut 0.6s 3s forwards;
+  }
+  @keyframes loaderOut { to { opacity:0; pointer-events:none; } }
+  .loader-logo { font-family:'Orbitron',monospace; font-size:2rem; font-weight:900; color:var(--green); text-shadow:0 0 30px var(--green); letter-spacing:6px; }
+  .loader-bar { width:320px; height:1px; background:rgba(0,255,65,0.15); overflow:hidden; }
+  .loader-fill { height:100%; background:var(--green); box-shadow:0 0 8px var(--green); animation:fill 2.5s ease forwards; }
+  @keyframes fill { from{width:0} to{width:100%} }
+  .loader-log { width:320px; font-size:11px; color:var(--text-dim); }
+  .l { opacity:0; }
+  .l:nth-child(1){animation:show 0s 0.2s forwards}
+  .l:nth-child(2){animation:show 0s 0.7s forwards}
+  .l:nth-child(3){animation:show 0s 1.2s forwards}
+  .l:nth-child(4){animation:show 0s 1.7s forwards}
+  .l:nth-child(5){animation:show 0s 2.2s forwards}
+  @keyframes show { to{opacity:1} }
+
+  /* ── HERO ── */
+  #hero {
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    position:relative; z-index:1; padding:80px 2.5rem 2rem;
+  }
+  .hero-wrap { display:grid; grid-template-columns:1fr 1fr; gap:4rem; max-width:1140px; width:100%; align-items:center; }
+
+  .hero-eyebrow { font-size:10px; letter-spacing:4px; color:var(--green); text-transform:uppercase; margin-bottom:1rem; opacity:0; animation:up 0.5s 0.4s forwards; }
+  .hero-eyebrow::before { content:'▸ '; }
+
+  .hero-name {
+    font-family:'Orbitron',monospace; font-weight:900;
+    font-size:clamp(2rem,4.5vw,3.4rem); color:#fff; line-height:1.08;
+    text-shadow:0 0 50px rgba(0,255,65,0.25);
+    opacity:0; animation:up 0.5s 0.6s forwards;
+  }
+  .hero-name em { color:var(--green); font-style:normal; }
+  .hero-name:hover { animation:glitch 0.4s ease; }
+
+  @keyframes glitch {
+    0%,100%{text-shadow:0 0 50px rgba(0,255,65,0.25)}
+    25%{text-shadow:-3px 0 #ff003c,3px 0 var(--cyan),0 0 50px rgba(0,255,65,0.25)}
+    75%{text-shadow:3px 0 #ff003c,-3px 0 var(--cyan),0 0 50px rgba(0,255,65,0.25)}
+  }
+
+  .hero-role { font-size:12px; color:var(--text-dim); margin:1.2rem 0 0.5rem; opacity:0; animation:up 0.5s 0.8s forwards; letter-spacing:1px; }
+  .hero-tags { display:flex; flex-wrap:wrap; gap:6px; margin:0.5rem 0 2rem; opacity:0; animation:up 0.5s 1s forwards; }
+  .hero-tag-pill {
+    font-size:10px; padding:3px 10px; border:1px solid var(--border);
+    color:var(--text-dim); letter-spacing:1px;
+  }
+  .hero-btns { display:flex; gap:1rem; flex-wrap:wrap; opacity:0; animation:up 0.5s 1.2s forwards; }
+
+  .btn {
+    padding:10px 24px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    letter-spacing:1.5px; text-decoration:none; border:1px solid var(--green);
+    color:var(--green); background:transparent; cursor:pointer;
+    transition:all 0.2s; position:relative; overflow:hidden; display:inline-block;
+  }
+  .btn::before { content:''; position:absolute; inset:0; background:var(--green); transform:translateX(-100%); transition:transform 0.2s; }
+  .btn:hover::before { transform:translateX(0); }
+  .btn:hover { color:#000; }
+  .btn span { position:relative; z-index:1; }
+  .btn-dim { border-color:var(--text-dim); color:var(--text-dim); }
+  .btn-dim::before { background:var(--text-dim); }
+  .btn-dim:hover { color:#000; }
+
+  @keyframes up { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+
+  /* ── AWS IAM BLOCK ── */
+  .iam-wrap {
+    background:var(--bg2); border:1px solid var(--border);
+    box-shadow:0 0 50px rgba(0,255,65,0.04), inset 0 0 30px rgba(0,0,0,0.4);
+    overflow:hidden;
+    opacity:0; animation:up 0.5s 0.7s forwards;
+  }
+  .iam-titlebar {
+    background:var(--bg3); padding:10px 16px;
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:8px;
+  }
+  .dot { width:10px; height:10px; border-radius:50%; }
+  .dot-r{background:#ff5f57} .dot-y{background:#febc2e} .dot-g{background:#28c840}
+  .iam-filename { margin-left:8px; font-size:10px; color:var(--text-dim); letter-spacing:1px; }
+  .iam-body { padding:20px 22px; font-size:12px; line-height:1.9; }
+
+  .iam-prompt { color:var(--text-dim); margin-bottom:6px; }
+  .iam-prompt span { color:var(--green); }
+
+  .json-line { display:block; }
+  .j-brace { color:#fff; }
+  .j-key { color:var(--cyan); }
+  .j-str { color:var(--yellow); }
+  .j-val-green { color:var(--green); }
+  .j-val-blue { color:var(--blue); }
+  .j-comment { color:var(--text-dim); font-style:italic; }
+  .j-arr-item { color:var(--text); }
+  .indent1 { padding-left:18px; }
+  .indent2 { padding-left:36px; }
+  .indent3 { padding-left:54px; }
+  .indent4 { padding-left:72px; }
+  .iam-cursor { display:inline-block; width:7px; height:13px; background:var(--green); animation:pulse 1s infinite; vertical-align:middle; margin-left:4px; }
+
+  /* ── DIVIDER ── */
+  .divider { width:100%; height:1px; background:linear-gradient(90deg,transparent,var(--border),transparent); }
+
+  /* ── SECTION ── */
+  .sec { position:relative; z-index:1; padding:5.5rem 2.5rem; max-width:1140px; margin:0 auto; }
+  .sec-head { display:flex; align-items:center; gap:1rem; margin-bottom:3rem; }
+  .sec-num { font-size:10px; color:var(--text-dim); letter-spacing:3px; }
+  .sec-title { font-family:'Orbitron',monospace; font-size:1.5rem; font-weight:700; color:#fff; }
+  .sec-line { flex:1; height:1px; background:linear-gradient(90deg,var(--border),transparent); }
+
+  /* ── SKILLS ── */
+  .skills-layout { display:grid; grid-template-columns:1fr 2fr; gap:2rem; align-items:start; }
+  .nmap-box {
+    background:#000; border:1px solid var(--border); padding:1.4rem;
+    font-size:11.5px; line-height:2.1;
+  }
+  .nm-g{color:var(--green)} .nm-c{color:var(--cyan)} .nm-y{color:var(--yellow)} .nm-d{color:var(--text-dim)}
+  .skills-cards { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .sk-card {
+    background:var(--bg2); border:1px solid var(--border); padding:1.3rem;
+    transition:border-color 0.2s,box-shadow 0.2s;
+  }
+  .sk-card:hover { border-color:var(--green); box-shadow:0 0 18px var(--green-glow); }
+  .sk-card-head { font-size:9px; letter-spacing:2.5px; color:var(--green); text-transform:uppercase; margin-bottom:0.8rem; padding-bottom:6px; border-bottom:1px solid var(--border); }
+  .sk-card-head::before { content:'// '; color:var(--text-dim); }
+  .badge-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .badge { padding:3px 9px; font-size:10px; border:1px solid var(--border); color:var(--text-dim); transition:all 0.18s; letter-spacing:0.5px; }
+  .badge:hover { border-color:var(--green); color:var(--green); background:var(--green-glow); }
+
+  /* ── PROJECTS ── */
+  .proj-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; }
+  .proj-card {
+    background:var(--bg2); border:1px solid var(--border); overflow:hidden;
+    transition:border-color 0.3s,box-shadow 0.3s,transform 0.3s;
+  }
+  .proj-card:hover { border-color:var(--green); box-shadow:0 0 28px var(--green-glow); transform:translateY(-5px); }
+  .proj-head { background:var(--bg3); padding:11px 16px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .proj-id { font-size:10px; color:var(--green); letter-spacing:1.5px; }
+  .proj-badge { font-size:9px; padding:2px 8px; border:1px solid; letter-spacing:1px; }
+  .pb-done { color:var(--green); border-color:var(--green); }
+  .pb-live { color:var(--cyan); border-color:var(--cyan); }
+  .proj-body { padding:1.4rem; }
+  .proj-title { font-family:'Orbitron',monospace; font-size:0.82rem; color:#fff; margin-bottom:0.7rem; font-weight:700; }
+  .proj-desc { font-size:11.5px; color:var(--text-dim); line-height:1.85; margin-bottom:1rem; }
+  .proj-term { background:#000; padding:12px 14px; font-size:11px; border:1px solid rgba(0,255,65,0.08); margin-bottom:1rem; line-height:2; }
+  .pt { color:var(--text-dim); }
+  .pt .hl{color:var(--green)} .pt .warn{color:var(--yellow)} .pt .err{color:var(--red)} .pt .info{color:var(--cyan)}
+  .proj-tags { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:1rem; }
+  .ptag { font-size:10px; padding:3px 8px; background:rgba(0,255,65,0.05); border:1px solid rgba(0,255,65,0.15); color:var(--text-dim); letter-spacing:0.5px; }
+  .proj-link { display:inline-flex; align-items:center; gap:5px; font-size:11px; color:var(--green); text-decoration:none; letter-spacing:1px; transition:text-shadow 0.2s; }
+  .proj-link:hover { text-shadow:0 0 8px var(--green); }
+  .proj-link::before { content:'→ '; }
+
+  /* ── CERTS ── */
+  .creds-layout { display:grid; grid-template-columns:2fr 1fr; gap:2rem; align-items:start; }
+  .certs-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+  .cert-card {
+    background:var(--bg2); border:1px solid var(--border); padding:1.1rem 1.2rem;
+    display:flex; align-items:flex-start; gap:1rem; transition:all 0.2s;
+  }
+  .cert-card:hover { border-color:var(--green); box-shadow:0 0 14px var(--green-glow); }
+  .cert-badge { font-size:1.2rem; flex-shrink:0; margin-top:2px; }
+  .cert-name { font-size:11.5px; color:var(--text); font-weight:600; margin-bottom:3px; }
+  .cert-issuer { font-size:9.5px; color:var(--text-dim); letter-spacing:1.5px; text-transform:uppercase; }
+  .cert-date { font-size:9.5px; color:var(--green); margin-top:4px; }
+
+  .terminal {
+    background:var(--bg2); border:1px solid var(--border); overflow:hidden;
+    box-shadow:inset 0 0 20px rgba(0,0,0,0.3);
+  }
+  .term-bar { background:var(--bg3); padding:10px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:7px; }
+  .term-title { margin-left:7px; font-size:10px; color:var(--text-dim); letter-spacing:1px; }
+  .term-body { padding:18px 20px; font-size:11.5px; line-height:2; }
+  .t-prompt { color:var(--green); }
+  .t-cmd { color:var(--cyan); }
+  .t-out { color:var(--text-dim); padding-left:14px; }
+  .t-key { color:var(--green); }
+  .t-cursor { display:inline-block; width:7px; height:13px; background:var(--green); animation:pulse 1s infinite; vertical-align:middle; }
+
+  /* ── ACHIEVEMENTS ── */
+  .ach-list { display:flex; flex-direction:column; gap:1rem; margin-top:2.5rem; }
+  .ach-row {
+    background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--green);
+    padding:1rem 1.5rem; display:flex; align-items:center; gap:1rem; transition:all 0.2s;
+  }
+  .ach-row:hover { background:var(--bg3); box-shadow:0 0 14px var(--green-glow); }
+  .ach-icon { font-size:1.2rem; flex-shrink:0; }
+  .ach-text { font-size:12.5px; color:var(--text); }
+  .ach-text strong { color:var(--green); }
+
+  /* ── CONTACT — new design ── */
+  #contact-section { position:relative; z-index:1; padding:5.5rem 2.5rem; max-width:1140px; margin:0 auto; }
+  .contact-header { display:flex; align-items:center; gap:1rem; margin-bottom:3.5rem; }
+
+  .contact-grid-new {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2rem;
+  }
+
+  /* Left: Threat Intel panel */
+  .threat-panel {
+    background:var(--bg2); border:1px solid var(--border); overflow:hidden;
+  }
+  .threat-panel-head {
+    background:var(--bg3); padding:12px 18px; border-bottom:1px solid var(--border);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .threat-panel-title { font-size:10px; color:var(--green); letter-spacing:2px; text-transform:uppercase; }
+  .threat-panel-id { font-size:9px; color:var(--text-dim); letter-spacing:1px; }
+  .threat-body { padding:0; }
+
+  .threat-row {
+    display:flex; align-items:stretch; border-bottom:1px solid rgba(0,255,65,0.08);
+    transition:background 0.18s;
+  }
+  .threat-row:last-child { border-bottom:none; }
+  .threat-row:hover { background:rgba(0,255,65,0.04); }
+
+  .threat-label {
+    width:140px; flex-shrink:0;
+    padding:14px 18px; font-size:10px; color:var(--text-dim);
+    letter-spacing:1.5px; text-transform:uppercase;
+    border-right:1px solid rgba(0,255,65,0.08);
+    display:flex; align-items:center;
+  }
+  .threat-value {
+    padding:14px 18px; font-size:12px; color:var(--text);
+    display:flex; align-items:center; gap:8px; flex:1;
+  }
+  .threat-value a {
+    color:var(--text); text-decoration:none; transition:color 0.2s;
+  }
+  .threat-value a:hover { color:var(--green); }
+  .threat-chip {
+    display:inline-block; padding:2px 8px; font-size:9px;
+    border:1px solid; letter-spacing:1px;
+  }
+  .chip-green { color:var(--green); border-color:var(--green); background:rgba(0,255,65,0.06); }
+  .chip-cyan { color:var(--cyan); border-color:var(--cyan); background:rgba(0,229,255,0.05); }
+  .chip-yellow { color:var(--yellow); border-color:var(--yellow); background:rgba(255,215,0,0.05); }
+
+  .threat-icon { font-size:1rem; }
+
+  /* Right: two stacked panels */
+  .contact-right { display:flex; flex-direction:column; gap:2rem; }
+
+  /* Encryption handshake terminal */
+  .enc-terminal {
+    background:var(--bg2); border:1px solid var(--border); overflow:hidden;
+  }
+  .enc-body { padding:18px 20px; font-size:11.5px; line-height:2.1; }
+  .tls-line { display:flex; gap:10px; }
+  .tls-ts { color:var(--text-dim); flex-shrink:0; font-size:10px; margin-top:2px; }
+  .tls-c { color:var(--text-dim); }
+  .tls-c .ok { color:var(--green); }
+  .tls-c .info { color:var(--cyan); }
+  .tls-c .key { color:var(--yellow); }
+
+  /* Availability grid */
+  .avail-panel {
+    background:var(--bg2); border:1px solid var(--border); overflow:hidden;
+  }
+  .avail-head { background:var(--bg3); padding:10px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .avail-title { font-size:10px; color:var(--green); letter-spacing:2px; text-transform:uppercase; }
+  .avail-body { padding:16px 18px; }
+
+  .avail-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(0,255,65,0.06); }
+  .avail-row:last-child { border-bottom:none; }
+  .avail-key { font-size:10px; color:var(--text-dim); letter-spacing:1px; text-transform:uppercase; }
+  .avail-val { font-size:11px; color:var(--text); }
+  .avail-bar-wrap { width:120px; height:3px; background:rgba(0,255,65,0.1); overflow:hidden; }
+  .avail-bar { height:100%; background:var(--green); box-shadow:0 0 6px var(--green); }
+
+  /* CTA buttons row */
+  .contact-cta { display:flex; gap:1rem; flex-wrap:wrap; margin-top:0.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top:1px solid var(--border); padding:2rem 2.5rem;
+    display:flex; justify-content:space-between; align-items:center;
+    position:relative; z-index:1; font-size:10px; color:var(--text-dim); letter-spacing:1.5px;
+  }
+  footer span { color:var(--green); }
+
+  @media (max-width:900px) {
+    .hero-wrap,.skills-layout,.creds-layout,.contact-grid-new { grid-template-columns:1fr; }
+    .skills-cards { grid-template-columns:1fr; }
+    nav .nav-links { display:none; }
+    footer { flex-direction:column; gap:0.5rem; text-align:center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">KC</div>
+  <div class="loader-bar"><div class="loader-fill"></div></div>
+  <div class="loader-log">
+    <div class="l">[SYS]  Booting identity kernel...</div>
+    <div class="l">[AWS]  Assuming role: Candidate_Kushvanth...</div>
+    <div class="l">[IAM]  Validating policy statements...</div>
+    <div class="l">[TLS]  Establishing encrypted channel...</div>
+    <div class="l">[✓]    Access granted — welcome.</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">KC_SEC</div>
+  <ul class="nav-links">
+    <li><a href="#skills">Arsenal</a></li>
+    <li><a href="#projects">Ops</a></li>
+    <li><a href="#certs">Creds</a></li>
+    <li><a href="#contact-section">Connect</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="nav-time" id="navtime"></div>
+    <div style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--green)">
+      <div class="pulse"></div>ONLINE
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+<div class="hero-wrap">
+  <!-- Left -->
+  <div>
+    <div class="hero-eyebrow">Cybersecurity Engineer</div>
+    <h1 class="hero-name">Kushvanth<br/><em>Chapala</em></h1>
+    <div class="hero-role">Penetration Tester · Cloud Security · Threat Detection</div>
+    <div class="hero-tags">
+      <span class="hero-tag-pill">CySA+</span>
+      <span class="hero-tag-pill">PenTest+</span>
+      <span class="hero-tag-pill">Security+</span>
+      <span class="hero-tag-pill">Network+</span>
+      <span class="hero-tag-pill">CTF Top 10%</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#projects" class="btn"><span>[ Ops Log ]</span></a>
+      <a href="#contact-section" class="btn btn-dim"><span>[ Hire Me ]</span></a>
+    </div>
+  </div>
+
+  <!-- Right: AWS IAM block -->
+  <div class="iam-wrap">
+    <div class="iam-titlebar">
+      <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+      <div class="iam-filename">bash &nbsp;—&nbsp; aws_iam_policy.json</div>
+    </div>
+    <div class="iam-body">
+      <div class="iam-prompt"><span>root@kc-sec</span>:~$ cat aws_iam_policy.json</div>
+      <br/>
+      <span class="json-line j-brace">{</span>
+      <span class="json-line indent1"><span class="j-key">"Version"</span>: <span class="j-str">"2012-10-17"</span>,</span>
+      <span class="json-line indent1"><span class="j-key">"Statement"</span>: [</span>
+      <span class="json-line indent2 j-brace">{</span>
+      <span class="json-line indent3"><span class="j-key">"Effect"</span>: <span class="j-val-green">"Allow"</span>,</span>
+      <span class="json-line indent3"><span class="j-key">"Principal"</span>: {</span>
+      <span class="json-line indent4"><span class="j-key">"Candidate"</span>: <span class="j-str">"Kushvanth_Chapala"</span></span>
+      <span class="json-line indent3">},</span>
+      <span class="json-line indent3"><span class="j-key">"Action"</span>: [</span>
+      <span class="json-line indent4 j-arr-item"><span class="j-str">"security:BreakAndFixSystems"</span>,</span>
+      <span class="json-line indent4 j-arr-item"><span class="j-str">"cloud:DefendAWSInfrastructure"</span>,</span>
+      <span class="json-line indent4 j-arr-item"><span class="j-str">"pentest:FindCriticalVulns"</span>,</span>
+      <span class="json-line indent4 j-arr-item"><span class="j-str">"siem:MonitorThreatActors"</span>,</span>
+      <span class="json-line indent4 j-arr-item"><span class="j-str">"team:CollaborateAndDeliver"</span></span>
+      <span class="json-line indent3">],</span>
+      <span class="json-line indent3"><span class="j-key">"Resource"</span>: <span class="j-str">"arn:aws:enterprise::*"</span>,</span>
+      <span class="json-line indent3"><span class="j-key">"Condition"</span>: {</span>
+      <span class="json-line indent4"><span class="j-key">"StringEquals"</span>: {</span>
+      <span class="json-line" style="padding-left:90px"><span class="j-key">"iam:CGPA"</span>: <span class="j-val-green">"7.5"</span>,</span>
+      <span class="json-line" style="padding-left:90px"><span class="j-key">"iam:CTF_Rank"</span>: <span class="j-val-green">"Top_10_Percent"</span>,</span>
+      <span class="json-line" style="padding-left:90px"><span class="j-key">"iam:Status"</span>: <span class="j-val-blue">"OPEN_FOR_HIRE"</span></span>
+      <span class="json-line indent4">}</span>
+      <span class="json-line indent3">}</span>
+      <span class="json-line indent2 j-brace">}</span>
+      <span class="json-line indent1">]</span>
+      <span class="json-line j-brace">}</span>
+      <br/>
+      <span style="color:var(--text-dim)">root@kc-sec:~$ </span><span class="iam-cursor"></span>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section class="sec" id="skills">
+  <div class="sec-head">
+    <span class="sec-num">// 01</span>
+    <h2 class="sec-title">Arsenal</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="skills-layout">
+    <div class="nmap-box">
+      <div class="nm-d">root@kc-sec:~$ <span class="nm-g">nmap</span> -sV -p- <span class="nm-c">kushvanth.sec</span></div>
+      <div class="nm-d" style="margin:4px 0">Starting Nmap 7.94 scan...</div>
+      <div>HOST: <span class="nm-g">UP</span> <span class="nm-d">(0.0001s latency)</span></div>
+      <br/>
+      <div><span class="nm-c">22/tcp &nbsp;</span> open <span class="nm-y"> Kali / VAPT</span></div>
+      <div><span class="nm-c">80/tcp &nbsp;</span> open <span class="nm-y"> Web Pentesting</span></div>
+      <div><span class="nm-c">443/tcp</span>  open <span class="nm-y"> Burp Suite / TLS</span></div>
+      <div><span class="nm-c">3306/tcp</span> open <span class="nm-y"> SQLMap / DB Enum</span></div>
+      <div><span class="nm-c">8080/tcp</span> open <span class="nm-y"> Metasploit / Nmap</span></div>
+      <div><span class="nm-c">9090/tcp</span> open <span class="nm-y"> AWS / Splunk / Docker</span></div>
+      <div><span class="nm-c">9200/tcp</span> open <span class="nm-y"> SIEM / Log Analytics</span></div>
+      <br/>
+      <div class="nm-d">7 ports open · scan complete in 1.55s</div>
+    </div>
+
+    <div class="skills-cards">
+      <div class="sk-card">
+        <div class="sk-card-head">Languages</div>
+        <div class="badge-row">
+          <span class="badge">C++</span><span class="badge">C</span><span class="badge">Python</span>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-card-head">Cloud</div>
+        <div class="badge-row">
+          <span class="badge">AWS EC2</span><span class="badge">S3</span><span class="badge">Lambda</span>
+          <span class="badge">IAM</span><span class="badge">VPC</span><span class="badge">CloudWatch</span>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-card-head">DevOps</div>
+        <div class="badge-row">
+          <span class="badge">Docker</span><span class="badge">Kubernetes</span>
+          <span class="badge">Terraform</span><span class="badge">CI/CD</span><span class="badge">Git</span>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-card-head">Offensive Security</div>
+        <div class="badge-row">
+          <span class="badge">Kali Linux</span><span class="badge">Metasploit</span>
+          <span class="badge">Burp Suite</span><span class="badge">SQLMap</span>
+          <span class="badge">Nmap</span><span class="badge">APKTool</span><span class="badge">JADX</span>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-card-head">Defensive / SIEM</div>
+        <div class="badge-row">
+          <span class="badge">Splunk</span><span class="badge">Wireshark</span>
+          <span class="badge">Exif Tool</span><span class="badge">Threat Hunting</span>
+        </div>
+      </div>
+      <div class="sk-card">
+        <div class="sk-card-head">Domains</div>
+        <div class="badge-row">
+          <span class="badge">VAPT</span><span class="badge">Cloud Sec</span>
+          <span class="badge">Mobile Pentest</span><span class="badge">DFIR</span>
+          <span class="badge">OWASP Top 10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section class="sec" id="projects">
+  <div class="sec-head">
+    <span class="sec-num">// 02</span>
+    <h2 class="sec-title">Mission Logs</h2>
+    <div class="sec-line"></div>
+  </div>
+  <div class="proj-grid">
+
+    <div class="proj-card">
+      <div class="proj-head">
+        <span class="proj-id">TARGET_01 :: aws-splunk-siem</span>
+        <span class="proj-badge pb-done">COMPLETE</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-title">AWS-Splunk Log Monitoring &amp; Security Analytics</div>
+        <div class="proj-desc">Cloud-native SIEM on AWS EC2 via Docker. Real-time dashboards for SSH brute-force detection with automated email alerting.</div>
+        <div class="proj-term">
+          <div class="pt">&gt; deploying Splunk Enterprise on EC2...</div>
+          <div class="pt">&gt; ingesting logs via <span class="hl">HEC pipeline</span>...</div>
+          <div class="pt">&gt; detected: <span class="warn">failed SSH logins (×47)</span></div>
+          <div class="pt">&gt; alert fired: <span class="err">BRUTE_FORCE_INDICATOR</span></div>
+          <div class="pt">&gt; status: <span class="hl">DASHBOARD_LIVE ✓</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="ptag">AWS</span><span class="ptag">Docker</span><span class="ptag">Splunk</span><span class="ptag">SIEM</span>
+        </div>
+        <a href="https://github.com/kushvanth7/Cloud-Based-Log-Monitoring-Security-Analytics-using-AWS-Docker-Splunk" class="proj-link" target="_blank">View Repository</a>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-head">
+        <span class="proj-id">TARGET_02 :: web-vapt</span>
+        <span class="proj-badge pb-done">COMPLETE</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-title">Vulnerability Assessment &amp; Penetration Testing</div>
+        <div class="proj-desc">Full-scope VAPT of Xbersec web app. Uncovered privilege escalation, default credentials, and sensitive data exposure.</div>
+        <div class="proj-term">
+          <div class="pt">&gt; scanning target: xbersec.local...</div>
+          <div class="pt">&gt; <span class="err">[CRITICAL]</span> default credentials found</div>
+          <div class="pt">&gt; <span class="err">[HIGH]</span> &nbsp;privilege escalation path mapped</div>
+          <div class="pt">&gt; <span class="warn">[MED] &nbsp;</span> sensitive data in response body</div>
+          <div class="pt">&gt; report: <span class="hl">DELIVERED ✓</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="ptag">Nmap</span><span class="ptag">Burp Suite</span><span class="ptag">SQLMap</span><span class="ptag">OWASP</span>
+        </div>
+        <a href="https://github.com/kushvanth7/Vulnerability-Assessment-Penetration-Testing-Report" class="proj-link" target="_blank">View Repository</a>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-head">
+        <span class="proj-id">TARGET_03 :: mobile-pentest</span>
+        <span class="proj-badge pb-done">COMPLETE</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-title">Mobile Application Penetration Testing</div>
+        <div class="proj-desc">Static &amp; dynamic analysis of an Android app. RBAC bypass via API payload manipulation, cookie-based data leakage uncovered.</div>
+        <div class="proj-term">
+          <div class="pt">&gt; decompiling APK via JADX...</div>
+          <div class="pt">&gt; intercepting API with Burp Suite...</div>
+          <div class="pt">&gt; <span class="err">[CRITICAL]</span> RBAC bypass: role=admin accepted</div>
+          <div class="pt">&gt; <span class="warn">[HIGH] &nbsp;</span> cookie leakage in GET response</div>
+          <div class="pt">&gt; remediation: <span class="hl">DOCUMENTED ✓</span></div>
+        </div>
+        <div class="proj-tags">
+          <span class="ptag">APKTool</span><span class="ptag">JADX</span><span class="ptag">Burp Suite</span><span class="ptag">cURL</span>
+        </div>
+        <a href="https://github.com/kushvanth7/mobile-pentest" class="proj-link" target="_blank">View Repository</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CERTS -->
+<section class="sec" id="certs">
+  <div class="sec-head">
+    <span class="sec-num">// 03</span>
+    <h2 class="sec-title">Credentials</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="creds-layout">
+    <div class="certs-grid">
+      <div class="cert-card"><div class="cert-badge">🔴</div><div><div class="cert-name">CompTIA CySA+</div><div class="cert-issuer">CompTIA</div><div class="cert-date">July 2025</div></div></div>
+      <div class="cert-card"><div class="cert-badge">🔴</div><div><div class="cert-name">CompTIA PenTest+</div><div class="cert-issuer">CompTIA</div><div class="cert-date">July 2025</div></div></div>
+      <div class="cert-card"><div class="cert-badge">🔴</div><div><div class="cert-name">CompTIA Security+</div><div class="cert-issuer">CompTIA</div><div class="cert-date">January 2025</div></div></div>
+      <div class="cert-card"><div class="cert-badge">🔴</div><div><div class="cert-name">CompTIA Network+</div><div class="cert-issuer">CompTIA</div><div class="cert-date">July 2024</div></div></div>
+      <div class="cert-card"><div class="cert-badge">🟢</div><div><div class="cert-name">Digital Forensic Investigator</div><div class="cert-issuer">Quick Heal</div><div class="cert-date">January 2025</div></div></div>
+    </div>
+
+    <div class="terminal">
+      <div class="term-bar">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <div class="term-title">sys.trust_anchors</div>
+      </div>
+      <div class="term-body">
+        <div class="t-out" style="color:var(--text-dim)">$ verify --all certs</div><br/>
+        <div class="t-out"><span class="t-key">✓</span> CySA+ &nbsp;&nbsp;&nbsp;:: CompTIA [VALID]</div>
+        <div class="t-out"><span class="t-key">✓</span> PenTest+&nbsp;&nbsp;:: CompTIA [VALID]</div>
+        <div class="t-out"><span class="t-key">✓</span> Sec+ &nbsp;&nbsp;&nbsp;&nbsp;:: CompTIA [VALID]</div>
+        <div class="t-out"><span class="t-key">✓</span> Net+ &nbsp;&nbsp;&nbsp;&nbsp;:: CompTIA [VALID]</div>
+        <div class="t-out"><span class="t-key">✓</span> DFIR &nbsp;&nbsp;&nbsp;&nbsp;:: QuickHeal [VALID]</div>
+        <br/>
+        <div class="t-out" style="color:var(--text-dim)">Sig chain: <span style="color:var(--green)">TRUSTED ✓</span></div>
+        <div style="margin-top:8px"><span style="color:var(--text-dim)">root@kc-sec:~$ </span><span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ach-list">
+    <div class="ach-row"><div class="ach-icon">🏆</div><div class="ach-text"><strong>Top 10%</strong> — University-level CTF (Capture the Flag) competition</div></div>
+    <div class="ach-row"><div class="ach-icon">📄</div><div class="ach-text"><strong>Research Published</strong> — "Improving Throughput in Multithreaded Systems" · IJISRT</div></div>
+    <div class="ach-row"><div class="ach-icon">⚡</div><div class="ach-text"><strong>IoT Hackathon</strong> — Designed &amp; deployed a full Home Automation System</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT — Cybersecurity Professional Version -->
+<section id="contact-section">
+  <div class="contact-header sec-head">
+    <span class="sec-num">// 04</span>
+    <h2 class="sec-title">Establish Secure Channel</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="contact-grid-new">
+
+    <!-- LEFT: Threat Intel / Recon panel style contact -->
+    <div class="threat-panel">
+      <div class="threat-panel-head">
+        <span class="threat-panel-title">▸ OPERATOR PROFILE</span>
+        <span class="threat-panel-id">UID: KC-2024-SEC-01</span>
+      </div>
+      <div class="threat-body">
+
+        <div class="threat-row">
+          <div class="threat-label">HANDLE</div>
+          <div class="threat-value">
+            <span class="threat-icon">🎯</span>
+            Kushvanth Chapala
+            <span class="threat-chip chip-green">ACTIVE</span>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">EMAIL</div>
+          <div class="threat-value">
+            <span class="threat-icon">🔐</span>
+            <a href="mailto:kushvanth2917@gmail.com">kushvanth2917@gmail.com</a>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">LINKEDIN</div>
+          <div class="threat-value">
+            <span class="threat-icon">💼</span>
+            <a href="https://www.linkedin.com/in/kushvanth" target="_blank">in/kushvanth</a>
+            <span class="threat-chip chip-cyan">VERIFIED</span>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">GITHUB</div>
+          <div class="threat-value">
+            <span class="threat-icon">🐙</span>
+            <a href="https://github.com/kushvanth7" target="_blank">kushvanth7</a>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">MOBILE</div>
+          <div class="threat-value">
+            <span class="threat-icon">📡</span>
+            <a href="tel:+919182366735">+91 91823 66735</a>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">LOCATION</div>
+          <div class="threat-value">
+            <span class="threat-icon">📍</span>
+            Punjab, India
+            <span class="threat-chip chip-yellow">REMOTE OK</span>
+          </div>
+        </div>
+
+        <div class="threat-row">
+          <div class="threat-label">CLEARANCE</div>
+          <div class="threat-value">
+            <span class="threat-icon">🛡️</span>
+            CySA+ · PenTest+ · Security+
+          </div>
+        </div>
+
+        <div class="threat-row" style="border-bottom:none">
+          <div class="threat-label">STATUS</div>
+          <div class="threat-value">
+            <span class="threat-icon">🟢</span>
+            <span style="color:var(--green);font-weight:600">OPEN_FOR_HIRE</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT: TLS handshake + availability -->
+    <div class="contact-right">
+
+      <!-- TLS terminal -->
+      <div class="enc-terminal">
+        <div class="term-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <div class="term-title">tls_handshake.log &nbsp;—&nbsp; contact.kc.sec:443</div>
+        </div>
+        <div class="enc-body">
+          <div class="tls-line"><span class="tls-ts">[00:00]</span><span class="tls-c">ClientHello → <span class="info">TLS 1.3</span> initiated</span></div>
+          <div class="tls-line"><span class="tls-ts">[00:01]</span><span class="tls-c">ServerHello → cipher: <span class="key">AES_256_GCM_SHA384</span></span></div>
+          <div class="tls-line"><span class="tls-ts">[00:02]</span><span class="tls-c">Certificate → <span class="ok">kushvanth_chapala.crt VALID ✓</span></span></div>
+          <div class="tls-line"><span class="tls-ts">[00:03]</span><span class="tls-c">KeyExchange → <span class="key">ECDHE x25519</span> agreed</span></div>
+          <div class="tls-line"><span class="tls-ts">[00:04]</span><span class="tls-c">Finished → <span class="ok">Handshake complete. Channel SECURE ✓</span></span></div>
+          <br/>
+          <div class="tls-line"><span class="tls-ts">[LIVE]</span><span class="tls-c" style="color:var(--green)">Awaiting inbound connection... <span class="t-cursor"></span></span></div>
+        </div>
+      </div>
+
+      <!-- Availability panel -->
+      <div class="avail-panel">
+        <div class="avail-head">
+          <span class="avail-title">▸ OPERATOR AVAILABILITY</span>
+          <span style="font-size:9px;color:var(--green)">● LIVE</span>
+        </div>
+        <div class="avail-body">
+          <div class="avail-row">
+            <span class="avail-key">Response SLA</span>
+            <span class="avail-val" style="color:var(--green)">~24 hours</span>
+          </div>
+          <div class="avail-row">
+            <span class="avail-key">Work Mode</span>
+            <span class="avail-val">On-site · Remote · Hybrid</span>
+          </div>
+          <div class="avail-row">
+            <span class="avail-key">Seeking</span>
+            <span class="avail-val">Pentest · Cloud Sec · SOC</span>
+          </div>
+          <div class="avail-row">
+            <span class="avail-key">Threat Intel</span>
+            <div class="avail-bar-wrap"><div class="avail-bar" style="width:88%"></div></div>
+          </div>
+          <div class="avail-row">
+            <span class="avail-key">Cloud Security</span>
+            <div class="avail-bar-wrap"><div class="avail-bar" style="width:82%"></div></div>
+          </div>
+          <div class="avail-row" style="border:none">
+            <span class="avail-key">Web / Mobile Pentest</span>
+            <div class="avail-bar-wrap"><div class="avail-bar" style="width:90%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-cta">
+        <a href="mailto:kushvanth2917@gmail.com" class="btn"><span>[ Send Transmission ]</span></a>
+        <a href="https://www.linkedin.com/in/kushvanth" target="_blank" class="btn btn-dim"><span>[ Connect on LinkedIn ]</span></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>root@kc-sec:~$ <span>echo "© 2026 Kushvanth Chapala"</span></div>
+  <div>Secure by Design &nbsp;·&nbsp; <span>All Rights Reserved</span></div>
+</footer>
+
+<script>
+  // Live clock in nav
+  function tick() {
+    const n = new Date();
+    const s = n.toISOString().replace('T',' ').substring(0,19) + ' UTC';
+    const el = document.getElementById('navtime');
+    if(el) el.textContent = s;
+  }
+  tick(); setInterval(tick, 1000);
+</script>
+
+</body>
+</html>
